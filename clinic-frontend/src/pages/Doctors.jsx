@@ -1,4 +1,3 @@
-// src/pages/Doctors.jsx
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import api, { extractErrors } from "../api/API";
@@ -35,14 +34,13 @@ export default function Doctors() {
     e.preventDefault();
     setErr(""); setSuccess("");
     try {
-      // If your create endpoint is /api/appointments/create/, change the path below to that.
       const res = await api.post("appointments/", {
         patient_name: form.patient_name,
         age: Number(form.age),
         appointment_date: form.appointment_date,
         doctor_id: Number(form.doctor_id),
       });
-      setSuccess("Appointment booked!");
+      setSuccess("✅ Appointment booked successfully!");
       setForm({ patient_name: "", age: "", appointment_date: "", doctor_id: "" });
     } catch (error) {
       setErr(extractErrors(error));
@@ -50,20 +48,20 @@ export default function Doctors() {
   };
 
   return (
-    <div>
+    <div className="page">
       <h2>Doctors</h2>
-      {loading ? <p>Loading...</p> : null}
-      {err && <pre style={{ color: "crimson", whiteSpace: "pre-wrap" }}>{err}</pre>}
-      <ul>
+      {loading && <p>Loading doctors...</p>}
+      {err && <p className="error">{err}</p>}
+      <ul className="doctor-list">
         {doctors.map((d) => (
-          <li key={d.id}>
+          <li key={d.id} className="doctor-card">
             <strong>{d.name}</strong> — {d.speciality} ({d.department})
           </li>
         ))}
       </ul>
 
-      <h3 style={{ marginTop: 24 }}>Book an appointment</h3>
-      <form onSubmit={book} style={{ display: "grid", gap: 8, maxWidth: 420 }}>
+      <h3>Book an Appointment</h3>
+      <form onSubmit={book} className="form">
         <label>
           Patient Name
           <input
@@ -107,8 +105,8 @@ export default function Doctors() {
             ))}
           </select>
         </label>
-        <button type="submit">Book</button>
-        {success && <p style={{ color: "green" }}>{success}</p>}
+        <button type="submit" className="btn btn-primary">Book</button>
+        {success && <p className="success">{success}</p>}
       </form>
     </div>
   );

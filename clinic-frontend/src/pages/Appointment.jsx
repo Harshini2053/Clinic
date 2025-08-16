@@ -1,4 +1,3 @@
-// src/pages/Appointments.jsx
 import { useEffect, useState } from "react";
 
 export default function Appointments() {
@@ -13,13 +12,11 @@ export default function Appointments() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Token ${token}`, // use the token from localStorage
+        "Authorization": `Token ${token}`,
       },
     })
       .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}`);
-        }
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
       })
       .then((data) => {
@@ -34,18 +31,14 @@ export default function Appointments() {
   }, []);
 
   return (
-    <div>
+    <div className="page">
       <h2>My Appointments</h2>
       {loading && <p>Loading...</p>}
-      {err && (
-        <pre style={{ color: "crimson", whiteSpace: "pre-wrap" }}>
-          {err}
-        </pre>
-      )}
+      {err && <p className="error">{err}</p>}
       {!loading && items.length === 0 ? (
         <p>No appointments yet.</p>
       ) : (
-        <table border="1" cellPadding="8">
+        <table className="table">
           <thead>
             <tr>
               <th>ID</th>
@@ -62,12 +55,7 @@ export default function Appointments() {
                 <td>{a.patient_name}</td>
                 <td>{a.age}</td>
                 <td>{a.appointment_date}</td>
-                <td>
-                  {a.doctor?.name ||
-                    a.doctor_name ||
-                    a.doctor ||
-                    a.doctor_id}
-                </td>
+                <td>{a.doctor?.name || a.doctor_name || a.doctor || a.doctor_id}</td>
               </tr>
             ))}
           </tbody>
